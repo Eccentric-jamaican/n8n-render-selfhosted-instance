@@ -99,25 +99,12 @@ flowchart LR
 
 ## Delivery Phases
 
-## Phase 0: Foundations (2-3 weeks)
-- API types + DB schema + minimal CRUD for object/link/action definitions.
-- Basic UI for defining ontology types.
-- Deliverable: persistent ontology metadata in system.
-
-## Phase 1: Action Runtime + Audit (2-4 weeks)
-- Action execution endpoint tied to workflows.
-- Immutable action log and UI timeline.
-- Deliverable: governed, traceable business actions.
-
-## Phase 2: Lineage + Object Explorer (3-5 weeks)
-- Emit lineage edges from action/workflow execution.
-- Add object graph explorer UI.
-- Deliverable: trust and explainability layer.
-
-## Phase 3: AI Grounding + Guardrails (3-6 weeks)
-- Ontology-aware AI tools and strict authorization.
-- Evaluation harness for action correctness and safety.
-- Deliverable: AIP-style enterprise AI workflow primitives.
+| Phase | Timebox | Scope | Deliverable |
+| --- | --- | --- | --- |
+| Phase 0: Foundations | 2-3 weeks | API types, DB schema, minimal CRUD for object/link/action definitions, and basic ontology type UI | Persistent ontology metadata in system |
+| Phase 1: Action Runtime + Audit | 2-4 weeks | Action execution endpoint tied to workflows, immutable action log, UI timeline | Governed, traceable business actions |
+| Phase 2: Lineage + Object Explorer | 3-5 weeks | Lineage edge emission from action/workflow execution, object graph explorer UI | Trust and explainability layer |
+| Phase 3: AI Grounding + Guardrails | 3-6 weeks | Ontology-aware AI tools, strict authorization, evaluation harness for action correctness and safety | AIP-style enterprise AI workflow primitives |
 
 ## MVP Scope (First Shippable Slice)
 
@@ -147,7 +134,7 @@ Success criteria:
 
 | Risk | Impact | Mitigation |
 | --- | --- | --- |
-| Scope explosion from broad “Foundry parity” goal | Slow delivery | Strict phased milestones with MVP object set |
+| Scope explosion from broad "Foundry parity" goal | Slow delivery | Strict phased milestones with MVP object set |
 | Permission model complexity | Security gaps | Start deny-by-default, add explicit scope grants |
 | Performance from lineage graph growth | Query latency | Use append-only edges + indexed query surfaces |
 | AI unsafe actions | Production risk | Hard authorization checks + eval gates before rollout |
@@ -160,4 +147,3 @@ Success criteria:
 - https://www.palantir.com/docs/foundry/action-types/action-log
 - https://www.palantir.com/docs/foundry/ontologies/ontology-permissions
 - https://www.palantir.com/docs/foundry/aip-evals/overview/
-
