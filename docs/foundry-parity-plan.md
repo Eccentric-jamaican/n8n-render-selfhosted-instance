@@ -97,6 +97,55 @@ flowchart LR
   - `executeAction` (policy-checked)
 - Restrict AI tools through explicit allowlists and runtime permission checks.
 
+## UI Integration Blueprint (Editor UI)
+
+This section maps the new UI work to existing extension points so implementation stays consistent with current architecture.
+
+### Entry Points
+
+| Integration Need | Existing Hook | File Target | Implementation Note |
+| --- | --- | --- | --- |
+| New route names for ontology views | `VIEWS` enum | `packages/frontend/editor-ui/src/app/constants/navigation.ts` | Add `ONTOLOGY_MANAGER`, `ONTOLOGY_OBJECT_EXPLORER`, `ONTOLOGY_ACTION_TIMELINE` |
+| Router registration with auth/rbac middleware | Main route map | `packages/frontend/editor-ui/src/app/router.ts` | Add routes with `authenticated` + `rbac` middleware and telemetry metadata |
+| Sidebar discoverability in Settings | Settings menu composition | `packages/frontend/editor-ui/src/app/composables/useSettingsItems.ts` | Add settings menu item(s) gated by route access and feature flag |
+| Pluggable module route support | Module route initializer | `packages/frontend/editor-ui/src/main.ts` and module registration files | Keep ontology routes compatible with `registerModuleRoutes(router)` path for future modularization |
+| Runtime feature rollout | PostHog feature flags | `packages/frontend/editor-ui/src/app/stores/posthog.store.ts` | Introduce `ontology_manager_ui` and related flags for staged rollout |
+| Permission-aware UI rendering | Route/permission helpers | `packages/frontend/editor-ui/src/app/utils/rbac/*` | Hide actions/buttons unless backend scopes are granted |
+
+### Proposed Navigation Placement
+
+| Surface | Placement | Initial Scope |
+| --- | --- | --- |
+| Settings submenu | `Settings > Ontology` | Type definitions and policy defaults |
+| Project-level section (Phase 2) | Under Project navigation | Object explorer filtered by project context |
+| Workflow context action panel (Phase 3) | Node/action side panel | Ontology action execution and timeline links |
+
+### Pinia Store Plan
+
+| Store | Responsibility | Suggested Path |
+| --- | --- | --- |
+| `useOntologyTypesStore` | Object/link/action type CRUD state and pagination | `packages/frontend/editor-ui/src/features/ontology/stores/ontologyTypes.store.ts` |
+| `useOntologyObjectsStore` | Object instances, filters, graph traversal queries | `packages/frontend/editor-ui/src/features/ontology/stores/ontologyObjects.store.ts` |
+| `useOntologyActionsStore` | Action execution state, retries, and audit timeline feed | `packages/frontend/editor-ui/src/features/ontology/stores/ontologyActions.store.ts` |
+
+### Component Map
+
+| Component | Purpose | Suggested Path |
+| --- | --- | --- |
+| `OntologyManagerView.vue` | Manage object/link/action type definitions | `packages/frontend/editor-ui/src/features/ontology/views/OntologyManagerView.vue` |
+| `OntologyObjectExplorerView.vue` | Browse objects and relationships | `packages/frontend/editor-ui/src/features/ontology/views/OntologyObjectExplorerView.vue` |
+| `OntologyActionTimelineView.vue` | View immutable action log and details | `packages/frontend/editor-ui/src/features/ontology/views/OntologyActionTimelineView.vue` |
+| `OntologyTypeForm.vue` | Create/update ontology type definitions | `packages/frontend/editor-ui/src/features/ontology/components/OntologyTypeForm.vue` |
+| `OntologyGraphPanel.vue` | Relationship graph rendering panel | `packages/frontend/editor-ui/src/features/ontology/components/OntologyGraphPanel.vue` |
+
+### UX and Platform Constraints
+
+- Use i18n keys for all labels and content in `packages/@n8n/i18n`.
+- Use design-system components and CSS variables only (no hardcoded spacing px values).
+- Use a single `data-testid` value per element.
+- Keep feature-flag fallback routes hidden unless enabled.
+- Capture telemetry events for create/update/execute flows and include route-level page telemetry.
+
 ## Delivery Phases
 
 | Phase | Timebox | Scope | Deliverable |
