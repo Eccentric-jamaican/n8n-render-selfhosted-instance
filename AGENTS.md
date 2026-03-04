@@ -49,6 +49,7 @@ your current directory.
 ### Code Quality
 - `pnpm lint` - Lint code
 - `pnpm typecheck` - Run type checks
+- NO need for fallbacks within code that you write
 
 Always run lint and typecheck before committing code to ensure quality.
 Execute these commands from within the specific package directory you're
